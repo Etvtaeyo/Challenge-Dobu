@@ -1,5 +1,6 @@
 package com.dobu.dobu.controller;
 
+import com.dobu.dobu.dto.ConsultaDTO;
 import com.dobu.dobu.entity.Consulta;
 import com.dobu.dobu.service.ConsultaService;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class ConsultaController {
     }
 
     @PostMapping
-    public Consulta salvar(@RequestBody Consulta consulta){
-        return service.salvar(consulta);
+    public Consulta salvar(@RequestBody ConsultaDTO dto){
+        return service.salvar(dto);
     }
 }
