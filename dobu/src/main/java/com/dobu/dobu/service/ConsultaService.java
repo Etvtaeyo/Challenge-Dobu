@@ -1,49 +1,47 @@
 package com.dobu.dobu.service;
 
-import com.dobu.dobu.dto.ConsultaDTO;
-import com.dobu.dobu.entity.*;
-import com.dobu.dobu.repository.*;
+import com.dobu.dobu.entity.Consulta;
+import com.dobu.dobu.repository.ConsultaRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ConsultaService {
 
-    private final ConsultaRepository consultaRepository;
-    private final PetRepository petRepository;
-    private final MedicoRepository medicoRepository;
+    private final ConsultaRepository repository;
 
-    public ConsultaService(ConsultaRepository consultaRepository,
-                           PetRepository petRepository,
-                           MedicoRepository medicoRepository) {
-        this.consultaRepository = consultaRepository;
-        this.petRepository = petRepository;
-        this.medicoRepository = medicoRepository;
+    public ConsultaService(ConsultaRepository repository) {
+        this.repository = repository;
     }
 
-    public Consulta salvar(ConsultaDTO dto){
+    public List<Consulta> listar() {
+        return repository.findAll();
+    }
 
-        Pet pet = petRepository.findById(dto.petId)
-                .orElseThrow(() -> new RuntimeException("Pet não encontrado"));
+    public Consulta buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+    }
 
-        Medico medico = medicoRepository.findById(dto.medicoId)
-                .orElseThrow(() -> new RuntimeException("Médico não encontrado"));
+    public Consulta salvar(Consulta consulta) {
+        return repository.save(consulta);
+    }
 
-        if(dto.data.isBefore(LocalDateTime.now())){
-            throw new RuntimeException("Não pode agendar no passado");
-        }
+    public Consulta atualizar(Long id, Consulta consultaAtualizada) {
 
-        if(consultaRepository.existsByMedicoAndData(medico, dto.data)){
-            throw new RuntimeException("Médico já ocupado");
-        }
+        Consulta consulta = buscarPorId(id);
 
-        Consulta consulta = new Consulta();
-        consulta.setData(dto.data);
-        consulta.setDescricao(dto.descricao);
-        consulta.setPet(pet);
-        consulta.setMedico(medico);
+        consulta.setDescricao(consultaAtualizada.getDescricao());
+        consulta.setValor(consultaAtualizada.getValor());
+        consulta.setDataConsulta(consultaAtualizada.getDataConsulta());
+        consulta.setPet(consultaAtualizada.getPet());
+        consulta.setVeterinario(consultaAtualizada.getVeterinario());
 
-        return consultaRepository.save(consulta);
+        return repository.save(consulta);
+    }
+
+    public void deletar(Long id) {
+        repository.deleteById(id);
     }
 }
