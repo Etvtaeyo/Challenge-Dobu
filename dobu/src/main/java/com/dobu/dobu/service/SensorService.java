@@ -1,7 +1,5 @@
 package com.dobu.dobu.service;
 
-import com.dobu.dobu.entity.Sensor;
-import com.dobu.dobu.repository.SensorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

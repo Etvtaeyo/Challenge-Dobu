@@ -4,18 +4,16 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "consulta")
-public class Consulta {
+@Table(name = "agendamento")
+public class Agendamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime dataConsulta;
+    private LocalDateTime dataAgendamento;
 
-    private String descricao;
-
-    private Double valor;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "id_pet")
@@ -33,28 +31,20 @@ public class Consulta {
         this.id = id;
     }
 
-    public LocalDateTime getDataConsulta() {
-        return dataConsulta;
+    public LocalDateTime getDataAgendamento() {
+        return dataAgendamento;
     }
 
-    public void setDataConsulta(LocalDateTime dataConsulta) {
-        this.dataConsulta = dataConsulta;
+    public void setDataAgendamento(LocalDateTime dataAgendamento) {
+        this.dataAgendamento = dataAgendamento;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getStatus() {
+        return status;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Pet getPet() {
