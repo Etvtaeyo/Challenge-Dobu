@@ -16,8 +16,7 @@ public class PetService {
         this.repository = repository;
     }
 
-    @Cacheable("pets")
-    public Page<Pet> listar(Pageable pageable) {
+    public Page<Pet> listar(Pageable pageable){
         return repository.findAll(pageable);
     }
 

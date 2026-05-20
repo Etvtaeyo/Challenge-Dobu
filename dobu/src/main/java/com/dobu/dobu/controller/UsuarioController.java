@@ -5,6 +5,8 @@ import com.dobu.dobu.entity.Usuario;
 import com.dobu.dobu.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -19,8 +21,8 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> listar() {
-        return service.listar();
+    public Page<Usuario> listar(Pageable pageable) {
+        return service.listar(pageable);
     }
 
     @GetMapping("/{id}")
