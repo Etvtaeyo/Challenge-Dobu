@@ -4,6 +4,8 @@ import com.dobu.dobu.entity.Agendamento;
 import com.dobu.dobu.service.AgendamentoService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -18,8 +20,8 @@ public class AgendamentoController {
     }
 
     @GetMapping
-    public List<Agendamento> listar() {
-        return service.listar();
+    public Page<Agendamento> listar(Pageable pageable) {
+        return service.listar(pageable);
     }
 
     @GetMapping("/{id}")

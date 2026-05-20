@@ -3,6 +3,8 @@ package com.dobu.dobu.service;
 import com.dobu.dobu.entity.Agendamento;
 import com.dobu.dobu.repository.AgendamentoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,8 +17,8 @@ public class AgendamentoService {
         this.repository = repository;
     }
 
-    public List<Agendamento> listar() {
-        return repository.findAll();
+    public Page<Agendamento> listar(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
     public Agendamento buscarPorId(Long id) {

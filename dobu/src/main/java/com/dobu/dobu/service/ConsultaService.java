@@ -2,7 +2,10 @@ package com.dobu.dobu.service;
 
 import com.dobu.dobu.entity.Consulta;
 import com.dobu.dobu.repository.ConsultaRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,8 +18,16 @@ public class ConsultaService {
         this.repository = repository;
     }
 
+    public List<Consulta> buscarPorDescricao(String descricao){
+        return repository.findByDescricaoContainingIgnoreCase(descricao);
+    }
+    @Cacheable("consultas")
     public List<Consulta> listar() {
         return repository.findAll();
+    }
+
+    public Page<Consulta> listar(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
     public Consulta buscarPorId(Long id) {

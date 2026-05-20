@@ -3,6 +3,7 @@ package com.dobu.dobu.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+
 @Entity
 @Table(name = "agendamento")
 public class Agendamento {
