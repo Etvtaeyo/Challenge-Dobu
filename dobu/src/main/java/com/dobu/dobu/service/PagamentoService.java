@@ -3,6 +3,7 @@ package com.dobu.dobu.service;
 import com.dobu.dobu.entity.Pagamento;
 import com.dobu.dobu.repository.PagamentoRepository;
 import org.springframework.stereotype.Service;
+import com.dobu.dobu.exception.ResourceNotFoundException;
 
 import java.util.List;
 

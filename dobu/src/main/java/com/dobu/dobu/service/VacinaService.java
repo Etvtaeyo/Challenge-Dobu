@@ -3,6 +3,7 @@ package com.dobu.dobu.service;
 import com.dobu.dobu.entity.Vacina;
 import com.dobu.dobu.repository.VacinaRepository;
 import org.springframework.stereotype.Service;
+import com.dobu.dobu.exception.ResourceNotFoundException;
 
 import java.util.List;
 

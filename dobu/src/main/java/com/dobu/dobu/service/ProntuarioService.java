@@ -3,6 +3,7 @@ package com.dobu.dobu.service;
 import com.dobu.dobu.entity.Prontuario;
 import com.dobu.dobu.repository.ProntuarioRepository;
 import org.springframework.stereotype.Service;
+import com.dobu.dobu.exception.ResourceNotFoundException;
 
 import java.util.List;
 

@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.dobu.dobu.exception.ResourceNotFoundException;
 
 @Service
 public class PetService {
@@ -22,7 +23,8 @@ public class PetService {
 
     public Pet buscarPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pet não encontrado"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Pet não encontrado"));
     }
 
     public Pet salvar(Pet pet) {

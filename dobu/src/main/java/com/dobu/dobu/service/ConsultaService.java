@@ -1,11 +1,15 @@
 package com.dobu.dobu.service;
 
+import com.dobu.dobu.dto.ConsultaRequestDTO;
+import com.dobu.dobu.dto.ConsultaResponseDTO;
 import com.dobu.dobu.entity.Consulta;
+import com.dobu.dobu.exception.ResourceNotFoundException;
 import com.dobu.dobu.repository.ConsultaRepository;
+
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,41 +22,76 @@ public class ConsultaService {
         this.repository = repository;
     }
 
-    public List<Consulta> buscarPorDescricao(String descricao){
-        return repository.findByDescricaoContainingIgnoreCase(descricao);
-    }
     @Cacheable("consultas")
-    public List<Consulta> listar() {
-        return repository.findAll();
+    public Page<ConsultaResponseDTO> listar(Pageable pageable) {
+
+        return repository.findAll(pageable)
+                .map(this::converterParaDTO);
     }
 
-    public Page<Consulta> listar(Pageable pageable){
-        return repository.findAll(pageable);
+    public ConsultaResponseDTO buscarPorId(Long id) {
+
+        Consulta consulta = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Consulta não encontrada"));
+
+        return converterParaDTO(consulta);
     }
 
-    public Consulta buscarPorId(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+    public List<ConsultaResponseDTO> buscarPorDescricao(String descricao) {
+
+        return repository.findByDescricaoContainingIgnoreCase(descricao)
+                .stream()
+                .map(this::converterParaDTO)
+                .toList();
     }
 
-    public Consulta salvar(Consulta consulta) {
-        return repository.save(consulta);
+    public ConsultaResponseDTO salvar(ConsultaRequestDTO dto) {
+
+        Consulta consulta = new Consulta();
+
+        consulta.setDescricao(dto.getDescricao());
+        consulta.setValor(dto.getValor());
+        consulta.setDataConsulta(dto.getDataConsulta());
+
+        Consulta salva = repository.save(consulta);
+
+        return converterParaDTO(salva);
     }
 
-    public Consulta atualizar(Long id, Consulta consultaAtualizada) {
+    public ConsultaResponseDTO atualizar(Long id, ConsultaRequestDTO dto) {
 
-        Consulta consulta = buscarPorId(id);
+        Consulta consulta = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Consulta não encontrada"));
 
-        consulta.setDescricao(consultaAtualizada.getDescricao());
-        consulta.setValor(consultaAtualizada.getValor());
-        consulta.setDataConsulta(consultaAtualizada.getDataConsulta());
-        consulta.setPet(consultaAtualizada.getPet());
-        consulta.setVeterinario(consultaAtualizada.getVeterinario());
+        consulta.setDescricao(dto.getDescricao());
+        consulta.setValor(dto.getValor());
+        consulta.setDataConsulta(dto.getDataConsulta());
 
-        return repository.save(consulta);
+        Consulta atualizada = repository.save(consulta);
+
+        return converterParaDTO(atualizada);
     }
 
     public void deletar(Long id) {
+
+        repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Consulta não encontrada"));
+
         repository.deleteById(id);
+    }
+
+    private ConsultaResponseDTO converterParaDTO(Consulta consulta) {
+
+        ConsultaResponseDTO dto = new ConsultaResponseDTO();
+
+        dto.setId(consulta.getId());
+        dto.setDescricao(consulta.getDescricao());
+        dto.setValor(consulta.getValor());
+        dto.setDataConsulta(consulta.getDataConsulta());
+
+        return dto;
     }
 }

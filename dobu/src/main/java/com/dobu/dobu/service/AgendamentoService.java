@@ -5,6 +5,7 @@ import com.dobu.dobu.repository.AgendamentoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.dobu.dobu.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class AgendamentoService {
 
     public Agendamento buscarPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Agendamento não encontrado"));
     }
 
     public Agendamento salvar(Agendamento agendamento) {

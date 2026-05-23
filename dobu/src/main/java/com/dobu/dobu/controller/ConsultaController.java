@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import com.dobu.dobu.dto.ConsultaRequestDTO;
+import com.dobu.dobu.dto.ConsultaResponseDTO;
 
 import java.util.List;
 
@@ -20,29 +22,31 @@ public class ConsultaController {
     }
 
     @GetMapping
-    public Page<Consulta> listar(Pageable pageable) {
+    public Page<ConsultaResponseDTO> listar(Pageable pageable) {
         return service.listar(pageable);
     }
 
     @GetMapping("/{id}")
-    public Consulta buscarPorId(@PathVariable Long id) {
+    public ConsultaResponseDTO buscarPorId(@PathVariable Long id) {
         return service.buscarPorId(id);
     }
 
     @GetMapping("/buscar")
-    public List<Consulta> buscar(@RequestParam String descricao){
+    public List<ConsultaResponseDTO> buscar(@RequestParam String descricao){
         return service.buscarPorDescricao(descricao);
     }
 
     @PostMapping
-    public Consulta salvar(@Valid @RequestBody Consulta consulta) {
-        return service.salvar(consulta);
+    public ConsultaResponseDTO salvar(@Valid @RequestBody ConsultaRequestDTO dto) {
+        return service.salvar(dto);
     }
 
     @PutMapping("/{id}")
-    public Consulta atualizar(@PathVariable Long id,
-                              @Valid @RequestBody Consulta consulta) {
-        return service.atualizar(id, consulta);
+    public ConsultaResponseDTO atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody ConsultaRequestDTO dto) {
+
+        return service.atualizar(id, dto);
     }
 
     @DeleteMapping("/{id}")

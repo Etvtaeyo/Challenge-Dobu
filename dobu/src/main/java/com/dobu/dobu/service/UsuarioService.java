@@ -5,6 +5,7 @@ import com.dobu.dobu.repository.UsuarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.dobu.dobu.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class UsuarioService {
 
     public Usuario buscarPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Usuário não encontrado"));
     }
 
     public Usuario salvar(Usuario usuario) {
