@@ -2,7 +2,7 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-COPY target/*.jar app.jar
+COPY target/dobu-0.0.1-SNAPSHOT.jar app.jar
 
 RUN useradd -m springuser
 USER springuser
