@@ -105,7 +105,7 @@ exception   -> Tratamento de exceções
 ## Listar consultas
 
 ```http
-GET / htts://localhost:8080/ consultas
+GET / htts://localhost:8080/consultas
 ```
 
 ---
