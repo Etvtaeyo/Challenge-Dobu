@@ -19,9 +19,16 @@ public class Pet {
     private Raca raca;
 
     @ManyToOne
-    @JoinColumn(name = "id_tutor")
-    private Usuario tutor;
+    @JoinColumn(name = "id_dono" )
+    private Usuario dono;
 
+    public Usuario getDono() {
+        return dono;
+    }
+
+    public void setDono(Usuario dono) {
+        this.dono = dono;
+    }
     public Long getId() {
         return id;
     }
@@ -54,11 +61,4 @@ public class Pet {
         this.raca = raca;
     }
 
-    public Usuario getTutor() {
-        return tutor;
-    }
-
-    public void setTutor(Usuario tutor) {
-        this.tutor = tutor;
-    }
 }

@@ -1,6 +1,6 @@
 package com.dobu.dobu.enums;
 
 public enum TipoUsuario {
-    TUTOR,
+    DONO,
     VETERINARIO
 }

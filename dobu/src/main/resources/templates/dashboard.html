@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dobu | Início</title><link rel="stylesheet" href="/css/dobu.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="/dashboard"><img class="brand-logo" src="/images/dobu-logo.png" alt="Dobu"></a>
+    <div class="user-area"><span th:text="${usuario}">Usuário</span><form method="post" action="/logout"><button class="link-button">Sair</button></form></div>
+</header>
+<main class="container">
+    <section class="hero">
+        <div><span class="eyebrow">JORNADA DE CUIDADO</span><h1>Olá, <span th:text="${usuario}">usuário</span>!</h1><p class="muted">Vamos cuidar do seu animal juntos hoje?</p></div>
+        <img class="hero-art" src="/images/dobu-cat.png" alt="Gato Dobu">
+    </section>
+    <section class="stats">
+        <div class="stat"><span>AGENDAMENTOS</span><strong th:text="${agendamentos.size()}">0</strong><small>na sua agenda</small></div>
+        <div class="stat"><span>STATUS</span><strong>Ativo</strong><small>cuidado acompanhado</small></div>
+        <div class="stat"><span>PRÓXIMAS VACINAS</span><strong id="vacinas-count">—</strong><small>nos próximos 30 dias</small></div>
+    </section>
+    <section class="grid-2">
+        <article class="panel"><div class="panel-title"><div><span class="eyebrow">AGENDA</span><h2>Consultas</h2></div><span class="pill">Agendamento</span></div><div th:if="${agendamentos.isEmpty()}" class="empty">Nenhum agendamento cadastrado.</div><div class="appointment" th:each="a : ${agendamentos}"><div class="date-box"><b th:text="${#temporals.format(a.dataAgendamento, 'dd')}">12</b><small th:text="${#temporals.format(a.dataAgendamento, 'MMM')}">SET</small></div><div class="appointment-info"><b th:text="${a.pet != null ? a.pet.nome : 'Pet não informado'}">Pet</b><span th:text="${a.status}">PENDENTE</span></div><button class="confirm-button" th:if="${a.status != 'CONFIRMADO'}" th:attr="data-id=${a.id}" onclick="confirmar(this)">Confirmar</button><span class="confirmed" th:if="${a.status == 'CONFIRMADO'}">Confirmado</span></div></article>
+        <article class="panel"><div class="panel-title"><div><span class="eyebrow">LEMBRETES</span><h2>Saúde preventiva</h2></div><span class="pill green">Cuidado</span></div><p class="muted">Veja as vacinas que precisam de atenção e mantenha o calendário do seu pet em dia.</p><button class="button secondary" onclick="carregarVacinas()">Ver próximas vacinas</button><div id="vacinas-list" class="vaccine-list"></div></article>
+    </section>
+    <section class="panel api-panel"><span class="eyebrow">RECURSOS DOBU</span><h2>Seu cuidado em um só lugar</h2><p class="muted">Agenda, animais, lembretes e informações de saúde integrados com a API protegida.</p><div class="tags"><span>Perfil</span><span>Animal</span><span>Agendamento</span><span>Lembretes</span><span>Informações</span><span>Dobu-Cam</span></div></section>
+</main>
+<script>
+    async function confirmar(btn){const r=await fetch('/fluxos/agendamentos/'+btn.dataset.id+'/confirmar',{method:'PATCH'});if(r.ok)location.reload();else alert('Não foi possível confirmar o agendamento.');}
+    async function carregarVacinas(){const box=document.getElementById('vacinas-list');box.innerHTML='<p class="muted">Carregando...</p>';const r=await fetch('/fluxos/vacinas/proximas');if(!r.ok){box.innerHTML='<p class="muted">Não foi possível consultar as vacinas.</p>';return;}const data=await r.json();document.getElementById('vacinas-count').textContent=data.length;box.innerHTML=data.length?data.map(v=>`<div class="vaccine"><b>${v.nomeVacina}</b><span>Próxima dose: ${v.proximaDose}</span></div>`).join(''):'<p class="muted">Nenhuma dose nos próximos 30 dias.</p>';}
+    carregarVacinas();
+</script>
+</body></html>

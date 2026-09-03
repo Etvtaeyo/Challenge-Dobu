@@ -12,7 +12,7 @@ public class PetDTO {
     private Integer idade;
 
     @NotNull
-    private Long tutorId;
+    private Long donoId;
 
     @NotNull
     private Long racaId;
@@ -36,12 +36,12 @@ public class PetDTO {
         this.idade = idade;
     }
 
-    public Long getTutorId() {
-        return tutorId;
+    public Long getDonoId() {
+        return donoId;
     }
 
-    public void setTutorId(Long tutorId) {
-        this.tutorId = tutorId;
+    public void setDonoId(Long donoId) {
+        this.donoId = donoId;
     }
 
     public Long getRacaId() {

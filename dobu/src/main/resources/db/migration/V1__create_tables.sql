@@ -30,12 +30,12 @@ CREATE TABLE pet (
                      nome VARCHAR(255),
                      idade INTEGER,
                      id_raca BIGINT,
-                     id_tutor BIGINT,
+                     id_dono BIGINT,
                      CONSTRAINT fk_pet_raca
                          FOREIGN KEY (id_raca)
                              REFERENCES raca(id),
-                     CONSTRAINT fk_pet_tutor
-                         FOREIGN KEY (id_tutor)
+                     CONSTRAINT fk_pet_dono
+                         FOREIGN KEY (id_dono)
                              REFERENCES usuario(id)
 );
 

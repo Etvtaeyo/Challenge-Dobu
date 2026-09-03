@@ -38,7 +38,7 @@ public class PetService {
         pet.setNome(petAtualizado.getNome());
         pet.setIdade(petAtualizado.getIdade());
         pet.setRaca(petAtualizado.getRaca());
-        pet.setTutor(petAtualizado.getTutor());
+        pet.setDono(petAtualizado.getDono());
 
         return repository.save(pet);
     }

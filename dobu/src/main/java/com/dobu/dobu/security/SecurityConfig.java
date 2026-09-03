@@ -20,23 +20,28 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
 
                         // Rotas públicas
                         .requestMatchers(
-                                "/",
                                 "/login",
                                 "/css/**",
-                                "/js/**"
+                                "/js/**",
+                                "/error"
                         ).permitAll()
 
                         // Rotas exclusivas do veterinário
-                        .requestMatchers("/veterinario/**")
+                        .requestMatchers("/veterinario/**", "/consultas/**", "/usuarios/**", "/historicos/**", "/pagamentos/**", "/prontuarios/**")
                         .hasRole("VETERINARIO")
 
-                        // Rotas exclusivas do tutor
-                        .requestMatchers("/tutor/**")
-                        .hasRole("TUTOR")
+                        // Rotas exclusivas do dono do pet
+                        .requestMatchers("/dono/**", "/pets/**", "/vacinas/**")
+                        .hasRole("DONO")
+
+                        // Fluxos compartilhados, mas sempre autenticados
+                        .requestMatchers("/agendamentos/**", "/fluxos/**")
+                        .hasAnyRole("DONO", "VETERINARIO")
 
                         // Qualquer outra rota exige login
                         .anyRequest().authenticated()

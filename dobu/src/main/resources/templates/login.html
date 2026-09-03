@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dobu | Login</title>
+  <link rel="stylesheet" href="/css/dobu.css">
+</head>
+<body class="auth-page">
+<main class="auth-card">
+  <img class="auth-logo" src="/images/dobu-logo.png" alt="Dobu">
+  <div class="auth-heading">
+    <h1>Login</h1>
+    <p>Acesse sua jornada de cuidado</p>
+  </div>
+  <div class="alert error" th:if="${param.error}">E-mail ou senha inválidos.</div>
+  <div class="alert success" th:if="${param.logout}">Sessão encerrada com sucesso.</div>
+  <section class="auth-form-card">
+    <form method="post" action="/login">
+      <label for="username">Email</label>
+      <input id="username" name="username" type="email" placeholder="Digite seu email" required>
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password" placeholder="Digite sua senha" required minlength="6">
+      <button class="button" type="submit">Login</button>
+    </form>
+  </section>
+  <p class="demo-password"><strong>Exemplo para apresentação</strong><br>
+    Dono: dono@dobu.com<br>
+    Veterinário: vet@dobu.com<br>
+    Senha: <strong>123456</strong>
+  </p>
+</main>
+</body>
+</html>
