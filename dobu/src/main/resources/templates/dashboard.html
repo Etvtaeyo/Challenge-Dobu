@@ -6,13 +6,13 @@
 </head>
 <body>
 <header class="topbar">
-    <a class="brand" href="/dashboard"><img class="brand-logo" src="/images/dobu-logo.png" alt="Dobu"></a>
+    <a class="brand" href="/dashboard"><img class="brand-logo" src="/css/images/dobu-logo.png" alt="Dobu"></a>
     <div class="user-area"><span th:text="${usuario}">Usuário</span><form method="post" action="/logout"><button class="link-button">Sair</button></form></div>
 </header>
 <main class="container">
     <section class="hero">
         <div><span class="eyebrow">JORNADA DE CUIDADO</span><h1>Olá, <span th:text="${usuario}">usuário</span>!</h1><p class="muted">Vamos cuidar do seu animal juntos hoje?</p></div>
-        <img class="hero-art" src="/images/dobu-cat.png" alt="Gato Dobu">
+        <img class="hero-art" src="/css/images/dobu-cat.png" alt="Gato Dobu">
     </section>
     <section class="stats">
         <div class="stat"><span>AGENDAMENTOS</span><strong th:text="${agendamentos.size()}">0</strong><small>na sua agenda</small></div>
