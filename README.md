@@ -51,17 +51,21 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 
 # Tecnologias Utilizadas
 
-| Tecnologia      | Finalidade                    |
-| --------------- | ----------------------------- |
-| Java 21         | Linguagem principal           |
-| Spring Boot     | Framework backend             |
-| Spring Web      | API REST                      |
-| Spring Data JPA | Persistência de dados         |
-| Hibernate       | ORM                           |
-| H2 Database     | Banco de dados                |
-| Maven           | Gerenciamento de dependências |
-| Postman         | Teste dos endpoints           |
-| Git/GitHub      | Versionamento                 |
+| Tecnologia      | Finalidade                         |
+| --------------- | --------------------------------   |
+| Java 21         | Linguagem principal                | 
+| Spring Boot     | Framework backend                  |
+| Spring Web      | API REST                           |
+| Spring Data JPA | Persistência de dados              |
+| Hibernate       | ORM                                |
+| H2 Database     | Banco de dados                     |
+| Maven           | Gerenciamento de dependências      |
+| Postman         | Teste dos endpoints                |
+| Maven           | Banco local de desenvolvimento     |
+| Git/GitHub      | Versionamento                      |
+| Flyway          | Versionamento do schema do banco   |
+| Spring Security | Autenticação, autorização e BCrypt |
+| Thymeleaf       | Thymeleaf                          |
 
 ---
 
@@ -69,14 +73,36 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 
 O projeto foi organizado utilizando arquitetura em camadas:
 
-```text
-controller  -> Endpoints da API
-service     -> Regras de negócio
-repository  -> Acesso ao banco de dados
-entity      -> Entidades do sistema
-dto         -> Transferência de dados
-exception   -> Tratamento de exceções
+src/main/java/com/dobu/dobu
+├── controller   # API REST e páginas web
+├── dto          # Objetos de entrada e saída
+├── entity       # Entidades JPA
+├── exception    # Tratamento global de erros
+├── repository   # Repositórios Spring Data
+├── security     # Autenticação e autorização
+└── service      # Regras de negócio
 ```
+
+---
+
+Flyway e banco de dados
+As tabelas são criadas pela migration src/main/resources/db/migration/V1__create_tables.sql. O Hibernate está configurado com ddl-auto=none, portanto a estrutura deve ser controlada pelas migrations.
+No ambiente local, as propriedades padrão usam H2 em memória. Para um banco externo, configure:
+Bash
+export DB_URL='jdbc:postgresql://host:5432/dobu'
+export DB_DRIVER='org.postgresql.Driver'
+export DB_USERNAME='usuario'
+export DB_PASSWORD='senha-fora-do-repositorio'
+export H2_CONSOLE_ENABLED=false
+
+---
+
+
+| Perfil              | Permissões principais                                      |
+| ------------------- | ---------------------------------------------------------- |
+| DONO                | Dashboard, pets, vacinas, agendamentos e fluxos de cuidado |
+| VETERINARIO         | Consultas, usuários, históricos, pagamentos e prontuários  |
+| DONO ou VETERINARIO | Agendamentos e fluxos compartilhados                       |
 
 ---
 
@@ -211,6 +237,8 @@ git clone URL_DO_REPOSITORIO
 
 ```bash
 ./mvnw spring-boot:run
+
+A aplicação ficará disponível em http://localhost:8080. A tela inicial redireciona para o login em http://localhost:8080/login.
 ```
 
 ---
