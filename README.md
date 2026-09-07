@@ -65,7 +65,7 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 | Git/GitHub      | Versionamento                      |
 | Flyway          | Versionamento do schema do banco   |
 | Spring Security | Autenticação, autorização e BCrypt |
-| Thymeleaf       | Thymeleaf                          |
+| Thymeleaf       | Interface web server-side          |
 
 ---
 
