@@ -2,6 +2,7 @@ package com.dobu.dobu.entity;
 
 
 import com.dobu.dobu.enums.TipoUsuario;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +23,7 @@ public class Usuario {
     private String email;
 
     @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     @Enumerated(EnumType.STRING)
