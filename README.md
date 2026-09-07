@@ -48,7 +48,6 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 * Persistência utilizando JPA/Hibernate.
 
 ---
-
 # Tecnologias Utilizadas
 
 | Tecnologia      | Finalidade                         |
@@ -68,7 +67,7 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 | Thymeleaf       | Interface web server-side          |
 
 ---
-
+```
 # Estrutura do Projeto
 
 O projeto foi organizado utilizando arquitetura em camadas:
@@ -84,7 +83,7 @@ src/main/java/com/dobu/dobu
 ```
 
 ---
-
+```
 Flyway e banco de dados
 As tabelas são criadas pela migration src/main/resources/db/migration/V1__create_tables.sql. O Hibernate está configurado com ddl-auto=none, portanto a estrutura deve ser controlada pelas migrations.
 No ambiente local, as propriedades padrão usam H2 em memória. Para um banco externo, configure:
@@ -96,7 +95,7 @@ export DB_PASSWORD='senha-fora-do-repositorio'
 export H2_CONSOLE_ENABLED=false
 
 ---
-
+```
 
 | Perfil              | Permissões principais                                      |
 | ------------------- | ---------------------------------------------------------- |
@@ -105,7 +104,6 @@ export H2_CONSOLE_ENABLED=false
 | DONO ou VETERINARIO | Agendamentos e fluxos compartilhados                       |
 
 ---
-
 # Cronograma de Desenvolvimento
 
 | Atividade                        | Responsável | Data       |
@@ -125,7 +123,7 @@ export H2_CONSOLE_ENABLED=false
 | Finalização do projeto           | Giovanna    | 22/05/2026 |
 
 ---
-
+```
 # Endpoints da API
 
 ## Listar consultas
