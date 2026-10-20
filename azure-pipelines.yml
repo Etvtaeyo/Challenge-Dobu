@@ -1,0 +1,75 @@
+trigger:
+  branches:
+    include:
+      - master
+      - main
+
+pr:
+  branches:
+    include:
+      - master
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  javaVersion: '21'
+  artifactName: 'dobu-app'
+
+stages:
+  - stage: CI
+    displayName: 'CI - Build e testes'
+    jobs:
+      - job: BuildAndTest
+        displayName: 'Compilar, testar e publicar artefato'
+        steps:
+          - task: JavaToolInstaller@0
+            displayName: 'Configurar Java 21'
+            inputs:
+              versionSpec: '$(javaVersion)'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+
+          - script: |
+              cd dobu
+              chmod +x mvnw
+              ./mvnw -B clean verify
+            displayName: 'Executar build e testes Maven'
+
+          - task: PublishTestResults@2
+            displayName: 'Publicar resultados dos testes'
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: 'dobu/target/surefire-reports/TEST-*.xml'
+              failTaskOnFailedTests: true
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publicar JAR como artefato'
+            inputs:
+              targetPath: 'dobu/target/dobu-0.0.1-SNAPSHOT.jar'
+              artifact: '$(artifactName)'
+
+  - stage: CD
+    displayName: 'CD - Deploy na Azure Web App'
+    dependsOn: CI
+    condition: succeeded()
+    jobs:
+      - deployment: DeployWebApp
+        displayName: 'Publicar aplicação'
+        environment: 'dobu-production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: '$(artifactName)'
+                - task: AzureWebApp@1
+                  displayName: 'Deploy do JAR no Azure Web App'
+                  inputs:
+                    azureSubscription: '$(AZURE_SERVICE_CONNECTION)'
+                    appType: 'webAppLinux'
+                    appName: '$(AZURE_WEBAPP_NAME)'
+                    package: '$(Pipeline.Workspace)/$(artifactName)/dobu-0.0.1-SNAPSHOT.jar'
+                    runtimeStack: 'JAVA|21-java21'

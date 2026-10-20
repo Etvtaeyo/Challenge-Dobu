@@ -23,27 +23,31 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
 
-                        // Rotas públicas
+
                         .requestMatchers(
                                 "/login",
                                 "/css/**",
                                 "/js/**",
-                                "/error"
+                                "/error",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/actuator/health"
                         ).permitAll()
 
-                        // Rotas exclusivas do veterinário
+
                         .requestMatchers("/veterinario/**", "/consultas/**", "/usuarios/**", "/historicos/**", "/pagamentos/**", "/prontuarios/**")
                         .hasRole("VETERINARIO")
 
-                        // Rotas exclusivas do dono do pet
+
                         .requestMatchers("/dono/**", "/pets/**", "/vacinas/**")
                         .hasRole("DONO")
 
-                        // Fluxos compartilhados, mas sempre autenticados
+
                         .requestMatchers("/agendamentos/**", "/fluxos/**")
                         .hasAnyRole("DONO", "VETERINARIO")
 
-                        // Qualquer outra rota exige login
+
                         .anyRequest().authenticated()
                 )
 
