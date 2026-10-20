@@ -40,13 +40,29 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 * Busca por descrição;
 * Paginação de resultados.
 
-### Recursos adicionais
+### Pets e atendimento
+* Cadastro e gerenciamento de pets;
+* Cadastro de espécies e raças;
+* Agendamento de atendimentos;
+* Controle de vacinas;
+* Prontuários veterinários;
+* Registro de pagamentos;
+* Histórico de ações do sistema.
 
+
+
+### Recursos adicionais
+* Login com Spring Security;
 * Cache com `@Cacheable`;
 * Tratamento de exceções personalizadas;
 * DTOs para organização dos dados;
 * Persistência utilizando JPA/Hibernate.
+* Autorização por perfil de usuário;
+* Criptografia de senhas com BCrypt;
+* Documentação interativa com Swagger;
+* Health check com Spring Boot Actuator.
 
+  
 ---
 # Tecnologias Utilizadas
 
@@ -57,6 +73,7 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 | Spring Web      | API REST                           |
 | Spring Data JPA | Persistência de dados              |
 | Hibernate       | ORM                                |
+| PostgreSQL      | Banco de dados em produção         |
 | H2 Database     | Banco de dados                     |
 | Maven           | Gerenciamento de dependências      |
 | Postman         | Teste dos endpoints                |
@@ -65,6 +82,13 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 | Flyway          | Versionamento do schema do banco   |
 | Spring Security | Autenticação, autorização e BCrypt |
 | Thymeleaf       | Interface web server-side          |
+| Swagger/OpenAPI | Documentação e testes da API       |
+| JUnit e Mockito | Testes automatizados               |
+| Azure App Service| Hospedagem da aplicação           |
+
+
+
+
 
 ---
 ```
@@ -84,15 +108,32 @@ src/main/java/com/dobu/dobu
 
 ---
 ```
-Flyway e banco de dados
-As tabelas são criadas pela migration src/main/resources/db/migration/V1__create_tables.sql. O Hibernate está configurado com ddl-auto=none, portanto a estrutura deve ser controlada pelas migrations.
-No ambiente local, as propriedades padrão usam H2 em memória. Para um banco externo, configure:
-Bash
-export DB_URL='jdbc:postgresql://host:5432/dobu'
-export DB_DRIVER='org.postgresql.Driver'
-export DB_USERNAME='usuario'
-export DB_PASSWORD='senha-fora-do-repositorio'
-export H2_CONSOLE_ENABLED=false
+# Flyway e Banco de Dados
+As tabelas são criadas pela migration:
+
+Plain Text
+
+
+src/main/resources/db/migration/V1__create_tables.sql
+
+
+
+O Hibernate está configurado com ddl-auto=none. Portanto, a estrutura do banco é controlada pelas migrations do Flyway.
+
+O script SQL e o roteiro de evidências estão disponíveis em:
+
+Plain Text
+
+
+database/script_bd.sql
+
+
+
+Na produção, a aplicação utiliza PostgreSQL no Azure. No ambiente local, as propriedades padrão utilizam H2 em memória.
+
+A dependência flyway-database-postgresql é utilizada para permitir o suporte do Flyway ao PostgreSQL.
+
+
 
 ---
 ```
@@ -248,4 +289,32 @@ http://localhost:8080/consultas
 ```
 
 ---
+
+## Links da Entrega
+
+* Repositório: 
+
+GitHub - Challenge Dobu - https://github.com/Etvtaeyo/Challenge-Dobu
+
+* Aplicação online: 
+
+Acessar Dobu - https://dobu-web-2026-erick.azurewebsites.net
+
+* Tela de login: 
+
+Acessar login - https://dobu-web-2026-erick.azurewebsites.net/login
+
+* Swagger: 
+
+Abrir documentação da API - https://dobu-web-2026-erick.azurewebsites.net/swagger-ui/index.html
+
+* Health check: 
+
+Ver status da aplicação - https://dobu-web-2026-erick.azurewebsites.net/actuator/health
+
+* Vídeo: inserir após a gravação
+
+* Azure DevOps: inserir quando a organização e a pipeline forem configuradas
+
+
 
