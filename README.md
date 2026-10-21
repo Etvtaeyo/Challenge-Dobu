@@ -40,13 +40,29 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 * Busca por descrição;
 * Paginação de resultados.
 
-### Recursos adicionais
+### Pets e atendimento
+* Cadastro e gerenciamento de pets;
+* Cadastro de espécies e raças;
+* Agendamento de atendimentos;
+* Controle de vacinas;
+* Prontuários veterinários;
+* Registro de pagamentos;
+* Histórico de ações do sistema.
 
+
+
+### Recursos adicionais
+* Login com Spring Security;
 * Cache com `@Cacheable`;
 * Tratamento de exceções personalizadas;
 * DTOs para organização dos dados;
 * Persistência utilizando JPA/Hibernate.
+* Autorização por perfil de usuário;
+* Criptografia de senhas com BCrypt;
+* Documentação interativa com Swagger;
+* Health check com Spring Boot Actuator.
 
+  
 ---
 # Tecnologias Utilizadas
 
@@ -57,6 +73,7 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 | Spring Web      | API REST                           |
 | Spring Data JPA | Persistência de dados              |
 | Hibernate       | ORM                                |
+| PostgreSQL      | Banco de dados em produção         |
 | H2 Database     | Banco de dados                     |
 | Maven           | Gerenciamento de dependências      |
 | Postman         | Teste dos endpoints                |
@@ -65,6 +82,13 @@ A aplicação utiliza Spring Data JPA juntamente com Hibernate para persistênci
 | Flyway          | Versionamento do schema do banco   |
 | Spring Security | Autenticação, autorização e BCrypt |
 | Thymeleaf       | Interface web server-side          |
+| Swagger/OpenAPI | Documentação e testes da API       |
+| JUnit e Mockito | Testes automatizados               |
+| Azure App Service| Hospedagem da aplicação           |
+
+
+
+
 
 ---
 ```
@@ -84,15 +108,32 @@ src/main/java/com/dobu/dobu
 
 ---
 ```
-Flyway e banco de dados
-As tabelas são criadas pela migration src/main/resources/db/migration/V1__create_tables.sql. O Hibernate está configurado com ddl-auto=none, portanto a estrutura deve ser controlada pelas migrations.
-No ambiente local, as propriedades padrão usam H2 em memória. Para um banco externo, configure:
-Bash
-export DB_URL='jdbc:postgresql://host:5432/dobu'
-export DB_DRIVER='org.postgresql.Driver'
-export DB_USERNAME='usuario'
-export DB_PASSWORD='senha-fora-do-repositorio'
-export H2_CONSOLE_ENABLED=false
+# Flyway e Banco de Dados
+As tabelas são criadas pela migration:
+
+Plain Text
+
+
+src/main/resources/db/migration/V1__create_tables.sql
+
+
+
+O Hibernate está configurado com ddl-auto=none. Portanto, a estrutura do banco é controlada pelas migrations do Flyway.
+
+O script SQL e o roteiro de evidências estão disponíveis em:
+
+Plain Text
+
+
+database/script_bd.sql
+
+
+
+Na produção, a aplicação utiliza PostgreSQL no Azure. No ambiente local, as propriedades padrão utilizam H2 em memória.
+
+A dependência flyway-database-postgresql é utilizada para permitir o suporte do Flyway ao PostgreSQL.
+
+
 
 ---
 ```
@@ -190,7 +231,9 @@ A persistência foi realizada utilizando:
 
 * Spring Data JPA;
 * Hibernate;
-* Banco H2 Database.
+* PostgreSQL na Azure;
+* Banco H2 Database;
+* Flyway para versionamento das migrations.
 
 Os testes realizados demonstraram que os dados podem ser:
 
@@ -205,19 +248,34 @@ Os testes realizados demonstraram que os dados podem ser:
 
 Os testes dos endpoints foram realizados utilizando o Postman.
 
-As requisições exportadas devem ser adicionadas na pasta:
+O Swagger online está disponível em:
+https://dobu-web-2026-erick.azurewebsites.net/swagger-ui/index.html
 
-```text
-/documentos
-```
+Os testes automatizados podem ser executados com:
+./mvnw clean test
 
-Exemplo:
+Para gerar o arquivo JAR:
+./mvnw clean package
 
-```text
-/documentos
- ├── README.md
- ├── dobu-postman-collection.json
-```
+O arquivo será criado na pasta:
+target/
+
+---
+
+# Validações Realizadas na Azure
+* Aplicação Spring Boot publicada no Azure App Service;
+* Java 21 funcionando no ambiente de hospedagem;
+* PostgreSQL Flexible Server conectado;
+* Banco dobu criado e acessível;
+* Flyway executando as migrations;
+* Login funcionando;
+* Dashboard funcionando;
+* GET /pets retornando o pet de demonstração Nina;
+* GET /agendamentos retornando o agendamento inicial;
+* Swagger disponível online;
+* /actuator/health retornando HTTP 200 com status UP
+* Pipeline CI executando build Maven, testes automatizados e publicação do artefato dobu-app;
+* Pipeline CD realizando deploy automático no Azure Web App.
 
 ---
 
@@ -241,6 +299,62 @@ A aplicação ficará disponível em http://localhost:8080. A tela inicial redir
 
 ---
 
+# Azure e Deploy
+
+Os scripts de infraestrutura estão na pasta:
+azure/
+
+O diagrama da arquitetura está em:
+docs/arquitetura-cicd.mmd
+
+A aplicação está publicada no Azure App Service e está disponível em:
+https://dobu-web-2026-erick.azurewebsites.net
+
+# Pipeline CI/CD
+O projeto utiliza Azure DevOps para automatizar o ciclo de integração e entrega contínuas.
+
+O arquivo da pipeline está em:
+azure-pipelines.yml
+
+# CI
+Ao receber uma alteração na branch main ou master, a etapa de integração contínua:
+
+1.
+Configura o Java 21;
+
+2.
+Executa ./mvnw -B clean verify;
+
+3.
+Executa os testes automatizados;
+
+4.
+Publica os resultados dos testes;
+
+5.
+Gera e publica o artefato dobu-app.
+
+
+# CD
+Após a conclusão bem-sucedida da CI, a etapa de entrega contínua:
+
+1.
+Baixa o artefato JAR;
+
+2.
+Utiliza a Service Connection sc-azure-dobu;
+
+3.
+Publica o JAR no Web App dobu-web-2026-erick;
+
+4.
+Mantém a aplicação disponível no Azure App Service.
+
+O projeto da entrega está disponível em:
+https://dev.azure.com/RM566059/Sprint%204%20-%20Azure%20DevOps
+
+
+
 ## Acessar a API
 
 ```text
@@ -248,4 +362,32 @@ http://localhost:8080/consultas
 ```
 
 ---
+
+## Links da Entrega
+
+* Repositório: 
+
+GitHub - Challenge Dobu - https://github.com/Etvtaeyo/Challenge-Dobu
+
+* Aplicação online: 
+
+Acessar Dobu - https://dobu-web-2026-erick.azurewebsites.net
+
+* Tela de login: 
+
+Acessar login - https://dobu-web-2026-erick.azurewebsites.net/login
+
+* Swagger: 
+
+Abrir documentação da API - https://dobu-web-2026-erick.azurewebsites.net/swagger-ui/index.html
+
+* Health check: 
+
+Ver status da aplicação - https://dobu-web-2026-erick.azurewebsites.net/actuator/health
+
+* Vídeo: inserir após a gravação
+
+* Azure DevOps: https://dev.azure.com/RM566059/Sprint%204%20-%20Azure%20DevOps
+
+
 
