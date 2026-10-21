@@ -1,0 +1,15 @@
+flowchart LR
+    U[Usuário final] --> APP[Dobu API online\nSpring Boot / Java 21]
+    APP --> DB[(PostgreSQL\nBanco em nuvem)]
+
+    DEV[Desenvolvedor] -->|1. commit e push| GH[GitHub]
+    GH -->|2. gatilho| CI[Azure DevOps CI]
+    CI --> B[3. Maven build + testes]
+    B --> ART[4. Artefato JAR]
+    ART --> CD[5. Azure DevOps CD]
+    CD --> WEB[6. Deploy Azure Web App]
+    WEB --> APP
+
+    ADMIN[Professor / avaliador] -->|acessa| GH
+    ADMIN -->|acompanha| CI
+    ADMIN -->|testa| APP
