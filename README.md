@@ -385,7 +385,7 @@ Abrir documentação da API - https://dobu-web-2026-erick.azurewebsites.net/swag
 
 Ver status da aplicação - https://dobu-web-2026-erick.azurewebsites.net/actuator/health
 
-* Vídeo: inserir após a gravação
+* Vídeo: https://youtu.be/-mVeHW6qRjo( Devops) 
 
 * Azure DevOps: https://dev.azure.com/RM566059/Sprint%204%20-%20Azure%20DevOps
 
