@@ -231,7 +231,9 @@ A persistência foi realizada utilizando:
 
 * Spring Data JPA;
 * Hibernate;
-* Banco H2 Database.
+* PostgreSQL na Azure;
+* Banco H2 Database;
+* Flyway para versionamento das migrations.
 
 Os testes realizados demonstraram que os dados podem ser:
 
@@ -246,19 +248,34 @@ Os testes realizados demonstraram que os dados podem ser:
 
 Os testes dos endpoints foram realizados utilizando o Postman.
 
-As requisições exportadas devem ser adicionadas na pasta:
+O Swagger online está disponível em:
+https://dobu-web-2026-erick.azurewebsites.net/swagger-ui/index.html
 
-```text
-/documentos
-```
+Os testes automatizados podem ser executados com:
+./mvnw clean test
 
-Exemplo:
+Para gerar o arquivo JAR:
+./mvnw clean package
 
-```text
-/documentos
- ├── README.md
- ├── dobu-postman-collection.json
-```
+O arquivo será criado na pasta:
+target/
+
+---
+
+# Validações Realizadas na Azure
+* Aplicação Spring Boot publicada no Azure App Service;
+* Java 21 funcionando no ambiente de hospedagem;
+* PostgreSQL Flexible Server conectado;
+* Banco dobu criado e acessível;
+* Flyway executando as migrations;
+* Login funcionando;
+* Dashboard funcionando;
+* GET /pets retornando o pet de demonstração Nina;
+* GET /agendamentos retornando o agendamento inicial;
+* Swagger disponível online;
+* /actuator/health retornando HTTP 200 com status UP
+* Pipeline CI executando build Maven, testes automatizados e publicação do artefato dobu-app;
+* Pipeline CD realizando deploy automático no Azure Web App.
 
 ---
 
@@ -281,6 +298,62 @@ A aplicação ficará disponível em http://localhost:8080. A tela inicial redir
 ```
 
 ---
+
+# Azure e Deploy
+
+Os scripts de infraestrutura estão na pasta:
+azure/
+
+O diagrama da arquitetura está em:
+docs/arquitetura-cicd.mmd
+
+A aplicação está publicada no Azure App Service e está disponível em:
+https://dobu-web-2026-erick.azurewebsites.net
+
+# Pipeline CI/CD
+O projeto utiliza Azure DevOps para automatizar o ciclo de integração e entrega contínuas.
+
+O arquivo da pipeline está em:
+azure-pipelines.yml
+
+# CI
+Ao receber uma alteração na branch main ou master, a etapa de integração contínua:
+
+1.
+Configura o Java 21;
+
+2.
+Executa ./mvnw -B clean verify;
+
+3.
+Executa os testes automatizados;
+
+4.
+Publica os resultados dos testes;
+
+5.
+Gera e publica o artefato dobu-app.
+
+
+# CD
+Após a conclusão bem-sucedida da CI, a etapa de entrega contínua:
+
+1.
+Baixa o artefato JAR;
+
+2.
+Utiliza a Service Connection sc-azure-dobu;
+
+3.
+Publica o JAR no Web App dobu-web-2026-erick;
+
+4.
+Mantém a aplicação disponível no Azure App Service.
+
+O projeto da entrega está disponível em:
+https://dev.azure.com/RM566059/Sprint%204%20-%20Azure%20DevOps
+
+
 
 ## Acessar a API
 
@@ -314,7 +387,7 @@ Ver status da aplicação - https://dobu-web-2026-erick.azurewebsites.net/actuat
 
 * Vídeo: inserir após a gravação
 
-* Azure DevOps: inserir quando a organização e a pipeline forem configuradas
+* Azure DevOps: https://dev.azure.com/RM566059/Sprint%204%20-%20Azure%20DevOps
 
 
 
